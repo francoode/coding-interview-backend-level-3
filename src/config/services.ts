@@ -10,7 +10,7 @@ export const services = [
 	},
 ];
 
-export const getServices = () => {
+export const defineServices = (server: any) => {
 	const container = createContainer();
 	for (const s of services) {
 		try {
@@ -27,5 +27,5 @@ export const getServices = () => {
         }
 	}
 
-	return container;
+	server.app.container = container;
 };

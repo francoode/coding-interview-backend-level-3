@@ -14,6 +14,7 @@
   "devDependencies": {
     "@swc/core": "^1.7.2",
     "@swc/jest": "^0.2.36",
+    "@types/hapi": "^18.0.14",
     "@types/hapi__hapi": "^21.0.0",
     "@types/jest": "^29.5.12",
     "@types/node": "^22.12.0",

@@ -1,12 +1,14 @@
-import { initializeServer, startServer } from "./server"
-import "reflect-metadata"
+import { init } from "./server";
 
 process.on('unhandledRejection', (err) => {
-    console.error(err)
-    process.exit(1)
-})
-
-
-startServer().catch((err) => {
-    console.error(`StartServer Error: ${err}`);
+	console.error(err);
+	process.exit(1);
 });
+
+process.on('uncaughtException', (err) => {
+	console.error(err);
+	process.exit(1);
+});
+
+
+init();

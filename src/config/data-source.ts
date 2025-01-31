@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
-import { Item } from "./item/entities/item.model";
+import { Item } from "../core/item/entities/item.model";
+
 
 export const AppDataSource = new DataSource({
     type: "sqlite",
