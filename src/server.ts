@@ -1,5 +1,14 @@
 import Hapi from '@hapi/hapi'
-import { defineRoutes } from './routes'
+import { defineRoutes } from './config/routes'
+import { AppDataSource } from './config/data-source';
+import { getServices } from './config/services';
+import { AwilixContainer } from 'awilix';
+
+declare module '@hapi/hapi' {
+    interface ServerApplicationState {
+        container: AwilixContainer;
+    }
+}
 
 const getServer = () => {
     const server = Hapi.server({
@@ -8,13 +17,15 @@ const getServer = () => {
     })
 
     defineRoutes(server)
+    const container = getServices();
+    server.app.container = container;
 
     return server
 }
 
 export const initializeServer = async () => {
+    await AppDataSource.initialize();
     const server = getServer()
-    await server.initialize()
     return server
 }
 
@@ -24,3 +35,4 @@ export const startServer = async () => {
     console.log(`Server running on ${server.info.uri}`)
     return server
 };
+

@@ -1,4 +1,4 @@
-import { Server } from "@hapi/hapi"
+import { ReqRefDefaults, Server, ServerRoute } from "@hapi/hapi"
 
 export const defineRoutes = (server: Server) => {
     server.route({
@@ -11,3 +11,13 @@ export const defineRoutes = (server: Server) => {
         }
     })  
 }
+
+/* export const getRoutes = (): ServerRoute<ReqRefDefaults>[] => {
+    return [
+        {
+            method: 'GET',
+            path: '',
+
+        }
+    ];
+} */

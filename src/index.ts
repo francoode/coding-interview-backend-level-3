@@ -6,4 +6,7 @@ process.on('unhandledRejection', (err) => {
     process.exit(1)
 })
 
-await startServer()
+
+startServer().catch((err) => {
+    console.error(`StartServer Error: ${err}`);
+});
