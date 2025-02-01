@@ -5,9 +5,9 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "jest e2e",
-    "dev": "ts-node src/server.ts",
+    "dev": "ts-node src/index.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/index.js"
   },
   "author": "El Dorado Dev Team",
   "license": "ISC",
@@ -27,6 +27,7 @@
   "dependencies": {
     "@hapi/hapi": "^21.3.10",
     "awilix": "^12.0.4",
+    "mysql2": "^3.12.0",
     "reflect-metadata": "^0.2.2",
     "sqlite3": "^5.1.7",
     "typeorm": "^0.3.20"

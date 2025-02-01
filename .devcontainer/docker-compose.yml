@@ -1,0 +1,38 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    working_dir: /app
+    volumes:
+      - ..:/app
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - internal-network
+  
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "my_db"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "root"
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - internal-network
+
+volumes:
+  db_data:
+    driver: local
+
+networks:
+  internal-network:
+    driver: bridge
