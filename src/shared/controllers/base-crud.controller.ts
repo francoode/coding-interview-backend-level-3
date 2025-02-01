@@ -6,8 +6,8 @@ export abstract class BaseCrudController {
     abstract serviceName: string;
     
     findByIdOrFail = async (req: Request, res: ResponseToolkit) => {
-		const service = req.
-		return repo.findOneOrFail({ where: { id } });
+		//const service = req.
+		//return repo.findOneOrFail({ where: { id } });
 	}
 
 	create = async (data: any) => {

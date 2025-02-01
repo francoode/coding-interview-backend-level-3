@@ -12,31 +12,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.startServer = exports.initializeServer = void 0;
+exports.init = void 0;
 const hapi_1 = __importDefault(require("@hapi/hapi"));
 const routes_1 = require("./config/routes");
 const data_source_1 = require("./config/data-source");
 const services_1 = require("./config/services");
-const getServer = () => {
-    const server = hapi_1.default.server({
-        host: 'localhost',
-        port: 3000,
-    });
-    (0, routes_1.defineRoutes)(server);
-    const container = (0, services_1.getServices)();
-    server.app.container = container;
-    return server;
-};
-const initializeServer = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield data_source_1.AppDataSource.initialize();
-    const server = getServer();
-    return server;
+const init = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const server = hapi_1.default.server({
+            host: 'localhost',
+            port: 3000,
+        });
+        server.route({
+            method: "GET",
+            path: "/hello",
+            handler: (request, h) => {
+                return "Hello World";
+            },
+        });
+        routes_1.RouteConfig.getInstance(server);
+        services_1.ServiceContainer.getInstance();
+        yield data_source_1.AppDataSource.initialize();
+        yield server.start();
+        console.log(`Server running on ${server.info.uri}`);
+    }
+    catch (e) {
+        console.log(`Error initializing server: ${e}`);
+    }
 });
-exports.initializeServer = initializeServer;
-const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
-    const server = getServer();
-    yield server.start();
-    console.log(`Server running on ${server.info.uri}`);
-    return server;
-});
-exports.startServer = startServer;
+exports.init = init;

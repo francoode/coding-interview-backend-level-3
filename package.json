@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "jest e2e",
-    "dev": "ts-node src/index.ts",
+    "dev": "ts-node-dev --respawn --debug src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },
@@ -22,6 +22,7 @@
     "mocha": "^10.7.0",
     "prettier": "^3.4.2",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.7.3"
   },
   "dependencies": {

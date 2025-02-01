@@ -1,51 +1,37 @@
-import { asClass, createContainer } from 'awilix';
+import { asClass, Constructor, createContainer } from 'awilix';
 import { ItemRepository } from '../core/item/repositories/item.repository';
 import { ItemService } from '../core/item/services/item.service';
 
-//@todo cambiar dependencias
-export const services = [
-	{
-		service: ItemService,
-		dependencies: [ItemRepository],
-	},
-];
+export class ServiceContainer {
+	private static instance: ServiceContainer;
 
-export const defineServices = (server: any) => {
-	const container = createContainer();
-	for (const s of services) {
-		try {
-			const service = s.service;
+	private services: Constructor<any>[] = [ItemService, ItemRepository];
+	private readonly container = createContainer();
 
-			container.register(
-				service.name,
-				asClass(service).inject(() => ({
-					//@todo cambiar dependencias
-					repository: ItemRepository,
-				})),
-			);
-		} catch (error) {
-            console.error(`Error injecting service ${s.service.name}: ${error}`);
-        }
+	private constructor() {
+		this.defineServices();
 	}
 
-	server.app.container = container;
-};
+	public static getInstance(): ServiceContainer {
+		if (!ServiceContainer.instance) {
+			ServiceContainer.instance = new ServiceContainer();
+		}
+		return ServiceContainer.instance;
+	}
 
+	private defineServices = () => {
+		for (const s of this.services) {
+			try {
+				this.container.register({
+					[s.name]: asClass(s).singleton(),
+				});
+			} catch (error) {
+				console.error(`Error injecting service ${s.name}: ${error}`);
+			}
+		}
+	};
 
-/* await server.register({
-    plugin: awilixHapiPlugin,
-    options: {
-      container, // Pasar el contenedor de Awilix
-    },
-  });
-
-  // Ejemplo de ruta que usa dependencias inyectadas
-  server.route({
-    method: 'GET',
-    path: '/users',
-    handler: (request) => {
-      // Obtener el servicio inyectado desde el contenedor
-      const userService = request.container.resolve('userService');
-      return userService.getUsers();
-    },
-  }); */
+	getContainer = () => {
+		return this.container;
+	};
+}

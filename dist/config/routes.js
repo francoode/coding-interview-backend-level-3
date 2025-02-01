@@ -9,25 +9,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.defineRoutes = void 0;
-const defineRoutes = (server) => {
-    server.route({
-        method: 'GET',
-        path: '/ping',
-        handler: (request, h) => __awaiter(void 0, void 0, void 0, function* () {
-            return {
-                ok: true
-            };
-        })
-    });
-};
-exports.defineRoutes = defineRoutes;
-/* export const getRoutes = (): ServerRoute<ReqRefDefaults>[] => {
-    return [
-        {
-            method: 'GET',
-            path: '',
-
+exports.RouteConfig = void 0;
+class RouteConfig {
+    constructor(server) {
+        this.customRoutes = [
+            {
+                method: 'GET',
+                path: '/ping',
+                handler: (request, h) => __awaiter(this, void 0, void 0, function* () {
+                    return {
+                        ok: true,
+                    };
+                }),
+            },
+        ];
+        this.setRoutes = () => {
+            for (const route of this.customRoutes) {
+                console.log('route add');
+                this.server.route(route);
+            }
+        };
+        this.server = server;
+        this.setRoutes();
+    }
+    static getInstance(server) {
+        if (!RouteConfig.instance) {
+            RouteConfig.instance = new RouteConfig(server);
         }
-    ];
-} */ 
+        return RouteConfig.instance;
+    }
+}
+exports.RouteConfig = RouteConfig;

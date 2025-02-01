@@ -1,28 +1,29 @@
 import Hapi from '@hapi/hapi';
-import { defineRoutes } from './config/routes';
+import { RouteConfig } from './config/routes';
 import { AppDataSource } from './config/data-source';
-import { defineServices } from './config/services';
-import { AwilixContainer } from 'awilix';
-
-declare module '@hapi/hapi' {
-	interface ServerApplicationState {
-		container: AwilixContainer;
-	}
-}
+import { ServiceContainer } from './config/services';
 
 export const init = async () => {
 	try {
 		const server = Hapi.server({
-			host: 'localhost',
+			host: '0.0.0.0',
 			port: 3000,
 		});
 
-		defineRoutes(server);
-		defineServices(server);
+		server.route({
+			method: "GET",
+			path: "/hello",
+			handler: (request, h) => {
+			  return "Hello World";
+			},
+		  });
+
+		RouteConfig.getInstance(server);
+		ServiceContainer.getInstance();
 
 		await AppDataSource.initialize();
-
 		await server.start();
+
 		console.log(`Server running on ${server.info.uri}`);
 	} catch (e) {
 		console.log(`Error initializing server: ${e}`);
