@@ -1,7 +1,7 @@
-import { BaseCrudRepository } from "../../../shared/interfaces/base-crud.repository";
-import { BaseCrudService } from "../../../shared/sevices/base-crud.service";
+import { BaseCrudService } from '../../../shared/sevices/base-crud.service';
+import { Item } from '../entities/item.model';
+import { ItemRepository } from '../repositories/item.repository';
 
 export class ItemService extends BaseCrudService {
-    repository: BaseCrudRepository;
-    
+	protected repository = new ItemRepository(Item.name);
 }

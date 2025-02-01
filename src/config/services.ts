@@ -19,6 +19,7 @@ export const defineServices = (server: any) => {
 			container.register(
 				service.name,
 				asClass(service).inject(() => ({
+					//@todo cambiar dependencias
 					repository: ItemRepository,
 				})),
 			);
@@ -29,3 +30,22 @@ export const defineServices = (server: any) => {
 
 	server.app.container = container;
 };
+
+
+/* await server.register({
+    plugin: awilixHapiPlugin,
+    options: {
+      container, // Pasar el contenedor de Awilix
+    },
+  });
+
+  // Ejemplo de ruta que usa dependencias inyectadas
+  server.route({
+    method: 'GET',
+    path: '/users',
+    handler: (request) => {
+      // Obtener el servicio inyectado desde el contenedor
+      const userService = request.container.resolve('userService');
+      return userService.getUsers();
+    },
+  }); */

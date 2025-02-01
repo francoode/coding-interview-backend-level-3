@@ -1,8 +1,7 @@
 import { DataSource, ObjectLiteral, Repository } from 'typeorm';
-import { BaseCrudRepository } from '../interfaces/base-crud.repository';
 import { AppDataSource } from '../../config/data-source';
 
-export class BaseCrudMySqlRepository implements BaseCrudRepository {
+export class BaseCrudMySqlRepository {
 	private dataSource: DataSource = AppDataSource;
 	private entityName: string;
 

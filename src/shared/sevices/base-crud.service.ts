@@ -1,7 +1,9 @@
-import { BaseCrudRepository } from "../interfaces/base-crud.repository";
+import { BaseCrudMySqlRepository } from "../repositories/mysql-base.repository";
+
 
 export abstract class BaseCrudService {
-    abstract repository: BaseCrudRepository;
+    //@todo
+    protected abstract  repository: BaseCrudMySqlRepository;
     
     findByIdOrFail = (id: number) => this.repository.findByIdOrFail(id);
     create = (data: any) => this.repository.create(data);
