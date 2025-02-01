@@ -1,6 +1,7 @@
 import { ReqRefDefaults, Server, ServerApplicationState, ServerRoute } from '@hapi/hapi';
 import { ItemService } from '../core/item/services/item.service';
 import { ItemRepository } from '../core/item/repositories/item.repository';
+import { ItemController } from '../core/item/controllers/item.controller';
 
 
 export class RouteConfig {
@@ -19,6 +20,13 @@ export class RouteConfig {
 		},
 	];
 
+	private crudRoutes = [
+		{
+			resource: 'items',
+			controller: ItemController
+		}
+	]
+
 	private constructor(server: Server) {
 		this.server = server;
 		this.setRoutes();
@@ -33,8 +41,24 @@ export class RouteConfig {
 
 	private setRoutes = () => {
 		for (const route of this.customRoutes) {
-            console.log('route add');
 			this.server.route(route);
+		}
+
+		for(const route of this.crudRoutes) {
+			const controller = new route.controller();
+
+			this.server.route([
+				{
+					method: 'GET',
+					path: `/${route.resource}`,
+					handler: controller.findByIdOrFail.bind(controller)
+				},
+				{
+					method: 'POST',
+					path: `/${route.resource}`,
+					handler: controller.create.bind(controller)
+				}
+			])
 		}
 	};
 }

@@ -14,8 +14,9 @@ export class BaseCrudMySqlRepository {
 		return repo.findOneOrFail({ where: { id } });
 	}
 
-	create(data: any): Promise<any> {
-		throw new Error('Method not implemented.');
+	async create(data: any): Promise<any> {
+		const repo = await this.getRepository();
+		return repo.save(data);
 	}
 
 	findBy(filters: any): Promise<any[]> {

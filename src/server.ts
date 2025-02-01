@@ -10,14 +10,6 @@ export const init = async () => {
 			port: 3000,
 		});
 
-		server.route({
-			method: "GET",
-			path: "/hello",
-			handler: (request, h) => {
-			  return "Hello World";
-			},
-		  });
-
 		RouteConfig.getInstance(server);
 		ServiceContainer.getInstance();
 

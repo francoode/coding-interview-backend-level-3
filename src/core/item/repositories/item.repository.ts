@@ -1,8 +1,9 @@
 
 import { BaseCrudMySqlRepository } from "../../../shared/repositories/mysql-base.repository";
+import { Item } from "../entities/item.model";
 
 export class ItemRepository extends BaseCrudMySqlRepository {
-    constructor(entityName: string) {
-        super(entityName);
+    constructor() {
+        super(Item.name);
     }
 }
