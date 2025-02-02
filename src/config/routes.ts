@@ -50,13 +50,18 @@ export class RouteConfig {
 			this.server.route([
 				{
 					method: 'GET',
-					path: `/${route.resource}`,
+					path: `/${route.resource}/{id}`,
 					handler: controller.findByIdOrFail.bind(controller)
 				},
 				{
 					method: 'POST',
 					path: `/${route.resource}`,
 					handler: controller.create.bind(controller)
+				},
+				{
+					method: 'GET',
+					path: `/${route.resource}`,
+					handler: controller.findBy.bind(controller)
 				}
 			])
 		}

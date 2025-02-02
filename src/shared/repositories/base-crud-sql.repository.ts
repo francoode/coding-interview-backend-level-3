@@ -1,7 +1,7 @@
 import { DataSource, ObjectLiteral, Repository } from 'typeorm';
 import { AppDataSource } from '../../config/data-source';
 
-export class BaseCrudMySqlRepository {
+export class BaseCrudSqlRepository {
 	private dataSource: DataSource = AppDataSource;
 	private entityName: string;
 
@@ -9,19 +9,21 @@ export class BaseCrudMySqlRepository {
 		this.entityName = entityName;
 	}
 
-	async findByIdOrFail(id: number): Promise<any> {
+	findByIdOrFail = async (id: number) => {
 		const repo = await this.getRepository();
 		return repo.findOneOrFail({ where: { id } });
-	}
+	};
 
-	async create(data: any): Promise<any> {
+	create = async (data: any) => {
 		const repo = await this.getRepository();
-		return repo.save(data);
-	}
+		const entity = repo.create(data);
+		return repo.save(entity);
+	};
 
-	findBy(filters: any): Promise<any[]> {
-		throw new Error('Method not implemented.');
-	}
+	findBy = async () => {
+		const repo = await this.getRepository();
+		return repo.findBy({});
+	};
 
 	delete(id: number): Promise<any> {
 		throw new Error('Method not implemented.');

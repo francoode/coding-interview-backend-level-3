@@ -6,23 +6,33 @@ export abstract class BaseCrudController {
 	abstract serviceName: string;
 
 	findByIdOrFail = async (req: Request, res: ResponseToolkit) => {
-		const service = this.getService();
-
-		return { hola: 'find' };
-	};
-
-	create = async (data: any) => {
 		try {
-			const service = this.getService();
-			const entity = await service.create(data);
-			return entity;
+			const entities = await this.getService().findByIdOrFail(req.params.id);
+			return entities;
 		} catch (e) {
 			console.log(e);
 		}
 	};
 
-	findBy = async (filters: any) => {
-		throw new Error('Method not implemented.');
+	create = async (req: Request, res: ResponseToolkit) => {
+		try {
+			const service = this.getService();
+			const entity = await service.create(req.payload);
+			return res.response(entity).code(201);
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	findBy = async () => {
+		try {
+			console.log(1);
+			const service = this.getService();
+			const entity = await service.findBy();
+			return entity;
+		} catch (e) {
+			console.log(e);
+		}
 	};
 
 	delete = async (id: number) => {

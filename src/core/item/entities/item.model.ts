@@ -6,6 +6,6 @@ export class Item {
     id: number;
     @Column({ length: 300, nullable: false })
     name: string;
-    @Column({ type: 'decimal', precision: 12, scale: 3, nullable: false })
+    @Column('decimal', { precision: 10, scale: 2, nullable: false })
     price: number;
 }
