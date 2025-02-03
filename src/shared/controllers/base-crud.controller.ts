@@ -4,11 +4,12 @@ import { ServiceContainer } from '../../config/services';
 import { BodyValidator } from '../errors/body-validator';
 import { Logger } from '../others/logger';
 import { ErrorManager } from '../errors/error.manager';
+import Joi from 'joi';
 
 export abstract class BaseCrudController {
 	abstract serviceName: string;
-	abstract createDto: { new (...args: any[]): any };
-	abstract updateDto: { new (...args: any[]): any };
+	abstract createDto: Joi.ObjectSchema<any>;
+	abstract updateDto: Joi.ObjectSchema<any>;
 
 	readonly logger = new Logger(this.constructor.name);
 
@@ -32,7 +33,7 @@ export abstract class BaseCrudController {
 		}
 	};
 
-	findBy = async (res: ResponseToolkit) => {
+	findBy = async (req: Request, res: ResponseToolkit) => {
 		try {
 			const service = this.getService();
 			const entity = await service.findBy();

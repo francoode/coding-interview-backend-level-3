@@ -1,38 +1,28 @@
 import { plainToClass } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import { CustomError } from './custom.error';
+import Joi from 'joi';
 
 export class BodyValidator {
-	async validate<T extends Record<string, any>>(data: any, dtoClass: new () => T) {
+	async validate(data: any, dtoClass: Joi.ObjectSchema<any>) {
 		if (!data) throw new CustomError({ message: 'No data provided', httpCode: 400 });
 		if (!dtoClass) return true;
 
-		const dtoInstance = plainToClass(dtoClass, data);
-		const errors = await validate(dtoInstance);
+		const { error } = dtoClass.validate(data);
 
-		if (errors.length > 0) {
-			const formattedErrors = this.flattenValidationErrors(errors);
+		if (error && error.details && Array.isArray(error.details)) {
+			const firstError = error.details[0];
+			console.log(firstError);
+			const formattedErrors = {
+				errors: [
+					{
+						field: firstError.context?.label,
+						message: firstError.message,
+					},
+				],
+			};
+
 			throw new CustomError({ message: formattedErrors, httpCode: 400 });
 		}
-	}
-
-	private flattenValidationErrors(errors: ValidationError[]): Record<'errors', any[]> {
-		const result: Record<'errors', any[]> = {
-			errors: [],
-		};
-
-		errors.forEach((error) => {
-			if (error.constraints && typeof error.constraints === 'object') {
-				for (const message of Object.values(error.constraints)) {
-					result.errors.push({
-						field: error.property,
-						message,
-					});
-					break;
-				}
-			}
-		});
-
-		return result;
 	}
 }

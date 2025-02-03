@@ -1,8 +1,6 @@
-import { ReqRefDefaults, Server, ServerApplicationState, ServerRoute } from '@hapi/hapi';
-import { ItemService } from '../core/item/services/item.service';
-import { ItemRepository } from '../core/item/repositories/item.repository';
+import { ReqRefDefaults, Server, ServerRoute } from '@hapi/hapi';
 import { ItemController } from '../core/item/controllers/item.controller';
-
+import { ItemCreateSchema, ItemUpdateSchema } from '../core/item/dtos/item.dto';
 
 export class RouteConfig {
 	private static instance: RouteConfig;
@@ -23,9 +21,11 @@ export class RouteConfig {
 	private crudRoutes = [
 		{
 			resource: 'items',
-			controller: ItemController
-		}
-	]
+			controller: ItemController,
+			createDto: ItemCreateSchema,
+			updateDto: ItemUpdateSchema,
+		},
+	];
 
 	private constructor(server: Server) {
 		this.server = server;
@@ -44,36 +44,64 @@ export class RouteConfig {
 			this.server.route(route);
 		}
 
-		for(const route of this.crudRoutes) {
+		for (const route of this.crudRoutes) {
 			const controller = new route.controller();
 
 			this.server.route([
 				{
 					method: 'GET',
 					path: `/${route.resource}/{id}`,
-					handler: controller.findByIdOrFail.bind(controller)
+					options: {
+						description: 'Get resource by id',
+						tags: ['api'],
+					},
+					handler: controller.findByIdOrFail.bind(controller),
 				},
 				{
 					method: 'POST',
 					path: `/${route.resource}`,
-					handler: controller.create.bind(controller)
+					options: {
+						description: 'Create resource',
+						tags: ['api'],
+						validate: {
+							failAction: 'ignore',
+							payload: route.createDto,
+						},
+					},
+					handler: controller.create.bind(controller),
 				},
 				{
 					method: 'GET',
 					path: `/${route.resource}`,
-					handler: controller.findBy.bind(controller)
+					options: {
+						description: 'Get all resources',
+						tags: ['api'],
+					},
+					handler: controller.findBy.bind(controller),
 				},
 				{
 					method: 'DELETE',
 					path: `/${route.resource}/{id}`,
-					handler: controller.delete.bind(controller)
+					options: {
+						description: 'Delete resource',
+						tags: ['api'],
+					},
+					handler: controller.delete.bind(controller),
 				},
 				{
 					method: 'PUT',
 					path: `/${route.resource}/{id}`,
-					handler: controller.update.bind(controller)
-				}
-			])
+					options: {
+						description: 'Update resource',
+						tags: ['api'],
+						validate: {
+							failAction: 'ignore',
+							payload: route.updateDto,
+						},
+					},
+					handler: controller.update.bind(controller),
+				},
+			]);
 		}
 	};
 }

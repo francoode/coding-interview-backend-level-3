@@ -1,35 +1,24 @@
-import { Transform } from 'class-transformer';
-import { IsDefined, IsNumber, IsOptional, IsPositive, IsString, MaxLength } from 'class-validator';
+import Joi from "joi";
 
-export class ItemCreateDto {
-	@IsDefined()
-	@IsString()
-	@MaxLength(300)
-	name: string;
+export const ItemCreateSchema = Joi.object({
+  name: Joi.string().max(300).required(),
 
-	
-	@Transform(({ value }) => {
-		const num = Number(value);
-		return isNaN(num) ? null : num;
-	})
-	@IsDefined({ message: 'Field "price" is required' })
-	@IsNumber()
-	@IsPositive({ message: 'Field "price" cannot be negative' })
-	price: number;
-}
+  price: Joi.alternatives()
+    .try(Joi.number().min(0))
+    .required()
+    .messages({
+      "any.required": 'Field "price" is required',
+      "number.min": 'Field "price" cannot be negative',
+    }),
+});
 
-export class ItemUpdateDto {
-	@IsOptional()
-	@IsString()
-	@MaxLength(300)
-	name: string;
+export const ItemUpdateSchema = Joi.object({
+  name: Joi.string().max(300).optional(),
 
-	@Transform(({ value }) => {
-		const num = Number(value);
-		return isNaN(num) ? null : num;
-	})
-	@IsOptional()
-	@IsNumber()
-	@IsPositive({ message: 'Field "price" cannot be negative' })
-	price: number;
-}
+  price: Joi.alternatives()
+    .try(Joi.number().min(0))
+    .optional()
+    .messages({
+      "number.min": 'Field "price" cannot be negative',
+    }),
+});
