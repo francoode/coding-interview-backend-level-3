@@ -12,7 +12,6 @@ export class BodyValidator {
 
 		if (error && error.details && Array.isArray(error.details)) {
 			const firstError = error.details[0];
-			console.log(firstError);
 			const formattedErrors = {
 				errors: [
 					{
