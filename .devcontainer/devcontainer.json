@@ -1,6 +1,16 @@
+// See https://containers.dev/implementors/json_reference/ for configuration reference
 {
 	"name": "Coding Interview Backend Level 3",
-	"dockerComposeFile": "docker-compose.yml",
-	"service": "api-interview",
-	"workspaceFolder": "/app"
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": ".."
+	},
+	"mounts": [
+    	"source=${localWorkspaceFolder}/,target=/workspace,type=bind"
+  	],
+	"forwardPorts": [
+		3002
+	],
+	"postCreateCommand": "npm run dev",
+	"postStartCommand": "npm install && npm run dev"
 }

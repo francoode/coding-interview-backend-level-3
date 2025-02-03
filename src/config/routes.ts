@@ -62,6 +62,16 @@ export class RouteConfig {
 					method: 'GET',
 					path: `/${route.resource}`,
 					handler: controller.findBy.bind(controller)
+				},
+				{
+					method: 'DELETE',
+					path: `/${route.resource}/{id}`,
+					handler: controller.delete.bind(controller)
+				},
+				{
+					method: 'PUT',
+					path: `/${route.resource}/{id}`,
+					handler: controller.update.bind(controller)
 				}
 			])
 		}

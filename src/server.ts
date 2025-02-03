@@ -7,12 +7,13 @@ let serverInstance: Hapi.Server | null = null;
 
 const getServer = async () => {
 	const server = Hapi.server({
-		host: '0.0.0.0',
+		host: '127.0.0.1',
 		port: 3002,
 	});
 
 	RouteConfig.getInstance(server);
 	ServiceContainer.getInstance();
+	
 	return server;
 };
 export const init = async () => {
