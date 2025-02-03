@@ -7,7 +7,8 @@
     "test": "jest e2e",
     "dev": "ts-node-dev --respawn src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "format": "prettier --write src/**/*.{ts,tsx}"
   },
   "author": "El Dorado Dev Team",
   "license": "ISC",

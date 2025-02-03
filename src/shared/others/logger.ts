@@ -7,11 +7,11 @@ export class Logger {
 		this.logger = pino({
 			name: context,
 			level: 'info',
-			base: null, 
+			base: null,
 			transport: {
 				target: 'pino-pretty',
 				options: {
-					colorize: true, 
+					colorize: true,
 					ignore: 'pid,hostname',
 					translateTime: 'yyyy-mm-dd HH:MM:ss',
 				},

@@ -16,8 +16,8 @@ export class ErrorManager {
 			if (e.message && typeof e.message === 'string') {
 				message = { errors: e.message };
 			} else {
-                message = e.message;
-            }
+				message = e.message;
+			}
 			return res.response(message || internalErrorMessage).code(e.httpCode || 500);
 		}
 
